@@ -11,10 +11,8 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
-
-# Example schemas (replace with your own):
 
 class User(BaseModel):
     """
@@ -38,11 +36,17 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
-
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+# Concrete industry inquiries submitted from the website
+class Inquiry(BaseModel):
+    """
+    Inquiries collection schema
+    Collection name: "inquiry"
+    """
+    name: str = Field(..., description="Contact person name")
+    email: EmailStr = Field(..., description="Email for follow-up")
+    phone: Optional[str] = Field(None, description="Phone or WhatsApp number")
+    company: Optional[str] = Field(None, description="Company name")
+    service_interest: Optional[str] = Field(None, description="Primary service of interest")
+    message: str = Field(..., description="Inquiry details")
+    preferred_contact: Optional[str] = Field("email", description="Preferred contact method: email | phone | whatsapp")
+    source: Optional[str] = Field("website", description="Lead source")
